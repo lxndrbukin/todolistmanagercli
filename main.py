@@ -3,7 +3,7 @@ import json
 def create_task(task):
     with open("tasks.json", "r") as file:
         data = json.load(file)
-    data.append({'id': len(data) + 1, 'task': task})
+    data.append({'id': max(data, key=lambda x: x.get("id", float("-inf")))["id"] + 1, 'task': task})
     with open("tasks.json", "w") as file:
         json.dump(data, file)
 
@@ -15,16 +15,20 @@ def get_tasks():
 def delete_task(task_id):
     with open("tasks.json", "r") as file:
         data = json.load(file)
-    del data[task_id - 1]
+    for i, task in enumerate(data):
+        if task.get("id") == task_id:
+            del data[i]
     with open("tasks.json", "w") as file:
         json.dump(data, file)
 
 def format_task_list(tasks):
-    print("\n**************\nTASKS LIST:")
+    print("\n**************\nID  TASK:")
     for item in tasks:
-        print(f"{item['id']}. {item['task']}")
+        print(f"{item['id']}.  {item['task']}")
     print("**************\n")
 
+def print_error(message):
+    print(f"\033[31;1m{message}\033[0m")
 
 while True:
     try:
@@ -40,8 +44,10 @@ while True:
             task_id = int(input(f"Please enter the task ID to delete: "))
             delete_task(task_id)
             format_task_list(get_tasks())
+        else:
+            print_error("Please select from options 1-3")
     except ValueError:
-        print("Please enter a number")
+        print_error("Please enter a number")
     except KeyboardInterrupt:
-        print("\nProgram stopped")
+        print_error("\nProgram stopped by user")
         break
