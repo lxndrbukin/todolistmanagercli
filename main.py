@@ -1,24 +1,27 @@
 import json
+import os
+
+file_path = os.path.join(os.path.dirname(__file__), "tasks.json")
 
 def create_task(task):
-    with open("tasks.json", "r") as file:
+    with open(file_path, "r") as file:
         data = json.load(file)
     data.append({'id': max(data, key=lambda x: x.get("id", float("-inf")))["id"] + 1, 'task': task})
-    with open("tasks.json", "w") as file:
+    with open(file_path, "w") as file:
         json.dump(data, file)
 
 def get_tasks():
-    with open("tasks.json", "r") as file:
+    with open(file_path, "r") as file:
         data = json.load(file)
     return data
 
 def delete_task(task_id):
-    with open("tasks.json", "r") as file:
+    with open(file_path, "r") as file:
         data = json.load(file)
     for i, task in enumerate(data):
         if task.get("id") == task_id:
             del data[i]
-    with open("tasks.json", "w") as file:
+    with open(file_path, "w") as file:
         json.dump(data, file)
 
 def format_task_list(tasks):
@@ -28,7 +31,7 @@ def format_task_list(tasks):
     print("**************\n")
 
 def print_error(message):
-    print(f"\033[31;1m{message}\033[0m")
+    print(f"\033[31;1m\n{message}\033[0m\n")
 
 while True:
     try:
@@ -44,10 +47,10 @@ while True:
             task_id = int(input(f"Please enter the task ID to delete: "))
             delete_task(task_id)
             format_task_list(get_tasks())
-        else:
+        elif option > 3 or option < 1:
             print_error("Please select from options 1-3")
     except ValueError:
         print_error("Please enter a number")
     except KeyboardInterrupt:
-        print_error("\nProgram stopped by user")
+        print_error("Program stopped by user")
         break
