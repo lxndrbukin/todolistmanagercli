@@ -1,19 +1,29 @@
-task_list = []
+import json
 
 def create_task(task):
-    task_list.append({'id': len(task_list) + 1, 'task': task})
+    with open("tasks.json", "r") as file:
+        data = json.load(file)
+    data.append({'id': len(data) + 1, 'task': task})
+    with open("tasks.json", "w") as file:
+        json.dump(data, file)
 
 def get_tasks():
-    return task_list
+    with open("tasks.json", "r") as file:
+        data = json.load(file)
+    return data
 
 def delete_task(task_id):
-    del task_list[task_id - 1]
+    with open("tasks.json", "r") as file:
+        data = json.load(file)
+    del data[task_id - 1]
+    with open("tasks.json", "w") as file:
+        json.dump(data, file)
 
 def format_task_list(tasks):
-    print("*******\nTASKS LIST:\n")
+    print("\n**************\nTASKS LIST:")
     for item in tasks:
         print(f"{item['id']}. {item['task']}")
-    print("*******")
+    print("**************\n")
 
 
 while True:
@@ -22,7 +32,7 @@ while True:
         if option == 1:
             task = input(f"Enter and submit task: ")
             create_task(task)
-            print(get_tasks())
+            format_task_list(get_tasks())
         if option == 2:
             format_task_list(get_tasks())
         if option == 3:
