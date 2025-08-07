@@ -20,15 +20,19 @@ A simple command-line interface (CLI) application for managing tasks, built with
 1. Clone or download this repository.
 2. Install the required Python package:
    ```bash
+   pip install -r requirements.txt
+   ```
+   or
+   ```bash
    pip install tabulate
    ```
-3. Ensure you have a Python environment set up (Python 3.x recommended).
+4. Ensure you have a Python environment set up (Python 3.x recommended).
 
 ## Usage
 
 1. Run the script:
    ```bash
-   python task_manager.py
+   python main.py
    ```
 2. Follow the on-screen prompts to:
    - **Add a task**: Select option 1 and enter the task description.
