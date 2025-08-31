@@ -61,7 +61,7 @@ Full list of tasks is shown below:
 
 ## File Structure
 
-- `task_manager.py`: The main Python script containing the task management logic.
+- `main.py`: The main Python script containing the task management logic.
 - `tasks.json`: The JSON file where tasks are stored (automatically created if it doesn't exist).
 
 ## Code Overview
