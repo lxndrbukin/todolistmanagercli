@@ -136,7 +136,7 @@ The application is built around the `TaskManager` class:
 | `remove_entry(task_id)`        | Deletes task by ID                                 |
 | `format_task_list(tasks)`      | Prints tasks in a grid table using `tabulate`      |
 | `print_message()`              | Static method for colored console output           |
-| `cli()`                        | Main interactive loop                              |
+| `run_cli()`                    | Main interactive loop                              |
 
 ---
 
@@ -158,14 +158,3 @@ The application is built around the `TaskManager` class:
 - [ ] Implement **search/filter** by keyword
 - [ ] Add confirmation prompt before deletion
 - [ ] Export tasks to CSV or Markdown
-
----
-
-## License
-
-This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
-
----
-
-**Simple. Clean. Object-Oriented.**  
-Built with love in Python
