@@ -99,19 +99,46 @@ Task under ID 1 has been successfully deleted.
 
 ## File Structure
 
-- `main.py`: The main Python script containing the task management logic.
-- `tasks.json`: The JSON file where tasks are stored (automatically created if it doesn't exist).
+```
+.
+├── main.py           # Main script with TaskManager class and CLI
+├── tasks.json        # Auto-generated JSON file storing tasks
+└── README.md
+```
 
-## Code Overview
+### Example `tasks.json`
 
-- **Task Storage**: Tasks are stored in `tasks.json` as a list of dictionaries, each with an `id` and `task` field.
-- **Functions**:
-  - `create_task(task)`: Adds a new task with an auto-incremented ID.
-  - `get_tasks()`: Retrieves all tasks from the JSON file.
-  - `delete_task(task_id)`: Deletes a task by its ID.
-  - `format_task_list(tasks)`: Displays tasks in a tabular format using the `tabulate` library.
-  - `print_message(message, color)`: Prints color-coded messages to the console.
-- **Main Loop**: A `while` loop provides a menu-driven interface, handling user input and exceptions (e.g., invalid input, `Ctrl+C`).
+```json
+[
+  {
+    "id": 1,
+    "task": "Buy groceries"
+  },
+  {
+    "id": 2,
+    "task": "Call mom"
+  }
+]
+```
+
+---
+
+## Code Overview (OOP Design)
+
+The application is built around the `TaskManager` class:
+
+| Method                         | Description                                        |
+| ------------------------------ | -------------------------------------------------- |
+| `__init__()`                   | Initializes with default `tasks.json` path         |
+| `file_path`                    | Property with getter/setter for JSON file location |
+| `fetch_data()` / `save_data()` | Load/save tasks from/to JSON                       |
+| `create_entry(task)`           | Adds a new task with auto-incremented ID           |
+| `remove_entry(task_id)`        | Deletes task by ID                                 |
+| `format_task_list(tasks)`      | Prints tasks in a grid table using `tabulate`      |
+| `print_message()`              | Static method for colored console output           |
+| `cli()`                        | Main interactive loop                              |
+
+---
 
 ## Notes
 
@@ -131,3 +158,14 @@ Task under ID 1 has been successfully deleted.
 - [ ] Implement **search/filter** by keyword
 - [ ] Add confirmation prompt before deletion
 - [ ] Export tasks to CSV or Markdown
+
+---
+
+## License
+
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
+
+---
+
+**Simple. Clean. Object-Oriented.**  
+Built with love in Python
