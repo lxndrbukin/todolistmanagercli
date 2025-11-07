@@ -180,6 +180,3 @@ The application is built around the `TaskManager` class:
 - [ ] Implement **search/filter** by keyword  
 - [ ] Add confirmation prompt before deletion  
 - [ ] Export tasks to CSV or Markdown  
-
-
-</xai Artifact>
