@@ -1,6 +1,6 @@
 # Task Manager CLI (OOP Version)
 
-A modern, object-oriented command-line interface (CLI) application for managing tasks in Python. This tool allows users to **add**, **view**, and **delete** tasks stored in a JSON file, with a clean class-based design, formatted output using `tabulate`, and color-coded console feedback.
+A modern, **object-oriented command-line interface (CLI)** application for managing tasks in Python. This tool supports **adding, viewing, editing, and deleting** tasks stored in a JSON file, with a clean class-based design, formatted output using `tabulate`, and color-coded console feedback.
 
 ---
 
@@ -8,6 +8,7 @@ A modern, object-oriented command-line interface (CLI) application for managing 
 
 - **Add Tasks**: Create new tasks with auto-incremented unique IDs.
 - **View Tasks**: Display all tasks in a beautifully formatted table using `tabulate`.
+- **Edit Tasks**: Update existing tasks by ID.
 - **Delete Tasks**: Remove tasks by entering their ID.
 - **Persistent Storage**: Tasks saved in `tasks.json` (auto-created if missing).
 - **Color-Coded Feedback**: Success (green), errors (red), and info (blue) messages using ANSI codes.
@@ -54,7 +55,9 @@ python main.py
 Please select an option:
 1. Add Task
 2. View Tasks
-3. Delete Task
+3. Edit Task
+4. Delete Task
+5. Exit
 Enter option number:
 ```
 
@@ -78,7 +81,7 @@ Full list of tasks is shown below:
 +----+----------------------------------+
 ```
 
-#### Delete a Task
+#### Edit a Task
 
 ```
 Enter option number: 3
@@ -88,12 +91,29 @@ Full list of tasks is shown below:
 +----+----------------------------------+
 | 1  | Finish project documentation     |
 +----+----------------------------------+
+Please enter the task ID to edit: 1
+Please enter the updated task:
+Update documentation with examples
+
+Task under ID 1 has been successfully updated.
+```
+
+#### Delete a Task
+
+```
+Enter option number: 4
+Full list of tasks is shown below:
++----+----------------------------------+
+| ID | Task                             |
++----+----------------------------------+
+| 1  | Update documentation with examples |
++----+----------------------------------+
 Please enter the task ID to delete: 1
 
 Task under ID 1 has been successfully deleted.
 ```
 
-> **Exit**: Press `Ctrl+C` to stop the program gracefully.
+> **Exit**: Select option 5 or press `Ctrl+C` to stop the program gracefully.
 
 ---
 
@@ -133,6 +153,7 @@ The application is built around the `TaskManager` class:
 | `file_path`                    | Property with getter/setter for JSON file location |
 | `fetch_data()` / `save_data()` | Load/save tasks from/to JSON                       |
 | `create_entry(task)`           | Adds a new task with auto-incremented ID           |
+| `edit_entry(task_id, update)`  | Updates task text by ID                            |
 | `remove_entry(task_id)`        | Deletes task by ID                                 |
 | `format_task_list(tasks)`      | Prints tasks in a grid table using `tabulate`      |
 | `print_message()`              | Static method for colored console output           |
@@ -147,14 +168,18 @@ The application is built around the `TaskManager` class:
 - Invalid inputs (non-integers, out-of-range options) are handled with clear red error messages.
 - ANSI color codes work in most modern terminals (VS Code, iTerm, Windows Terminal, etc.).
 - The `file_path` can be customized via the setter if needed.
+- **Edit functionality** is now fully implemented — update any task by ID.
 
 ---
 
 ## Future Improvements
 
-- [x] Add **edit task** functionality
-- [ ] Support **task priorities/categories** (e.g. Low/Medium/High)
-- [ ] Add **due dates** and reminders
-- [ ] Implement **search/filter** by keyword
-- [ ] Add confirmation prompt before deletion
-- [ ] Export tasks to CSV or Markdown
+- [x] Add **edit task** functionality  
+- [ ] Support **task priorities/categories** (e.g. Low/Medium/High)  
+- [ ] Add **due dates** and reminders  
+- [ ] Implement **search/filter** by keyword  
+- [ ] Add confirmation prompt before deletion  
+- [ ] Export tasks to CSV or Markdown  
+
+
+</xai Artifact>
