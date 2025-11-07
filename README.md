@@ -152,7 +152,7 @@ The application is built around the `TaskManager` class:
 
 ## Future Improvements
 
-- [ ] Add **edit task** functionality
+- [x] Add **edit task** functionality
 - [ ] Support **task priorities** (Low/Medium/High)
 - [ ] Add **due dates** and reminders
 - [ ] Implement **search/filter** by keyword
