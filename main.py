@@ -31,7 +31,16 @@ class TaskManager:
             max_id = max(data, key=lambda x: x.get("id", float("-inf")))["id"] + 1
             data.append({'id': max_id, 'task': task})
         self.save_data(data)
-    
+
+    def edit_entry(self, task_id, update):
+        data = self.fetch_data()
+        if not data:
+            self.print_message("Task list empty")
+        for task in data:
+            if task["id"] == task_id:
+                task["task"] = update 
+        self.save_data(data)
+        
     def remove_entry(self, task_id):
         data = self.fetch_data()
         for i, task in enumerate(data):
@@ -52,7 +61,7 @@ class TaskManager:
     def run_cli(self):
         while True:
             try:
-                options = ["Add Task", "View Tasks", "Delete Task"]
+                options = ["Add Task", "View Tasks", "Edit Task", "Delete Task"]
                 print("Please select an option:")
                 for i, option in enumerate(options, 1):
                     print(f"{i}. {option}")
@@ -64,11 +73,17 @@ class TaskManager:
                     self.print_message("Task created successfully.", 32)
                 if selected == 3:
                     self.format_task_list(self.fetch_data())
+                    task_id = int(input(f"Please enter the task ID to edit: "))
+                    task_update = str(input("Please enter the updated task:\n"))
+                    self.edit_entry(task_id, task_update)
+                    self.print_message(f"Task under ID {task_id} has been successfully updated.", 32)
+                if selected == 4:
+                    self.format_task_list(self.fetch_data())
                     task_id = int(input(f"Please enter the task ID to delete: "))
                     self.remove_entry(task_id)
                     self.print_message(f"Task under ID {task_id} has been successfully deleted.", 32)
-                elif selected > 3 or selected < 1:
-                    self.print_message("Please select from options 1-3")
+                elif selected > len(options) or selected < 1:
+                    self.print_message(f"Please select from options 1-{len(options)}")
                 self.format_task_list(self.fetch_data())
             except ValueError:
                 self.print_message("Please enter a number")
