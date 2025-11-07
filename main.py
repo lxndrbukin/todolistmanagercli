@@ -61,7 +61,7 @@ class TaskManager:
     def run_cli(self):
         while True:
             try:
-                options = ["Add Task", "View Tasks", "Edit Task", "Delete Task"]
+                options = ["Add Task", "View Tasks", "Edit Task", "Delete Task", "Exit"]
                 print("Please select an option:")
                 for i, option in enumerate(options, 1):
                     print(f"{i}. {option}")
@@ -71,17 +71,20 @@ class TaskManager:
                     input_text = str(input(f"Enter and submit task: "))
                     self.create_entry(input_text)
                     self.print_message("Task created successfully.", 32)
-                if selected == 3:
+                elif selected == 3:
                     self.format_task_list(self.fetch_data())
                     task_id = int(input(f"Please enter the task ID to edit: "))
                     task_update = str(input("Please enter the updated task:\n"))
                     self.edit_entry(task_id, task_update)
                     self.print_message(f"Task under ID {task_id} has been successfully updated.", 32)
-                if selected == 4:
+                elif selected == 4:
                     self.format_task_list(self.fetch_data())
                     task_id = int(input(f"Please enter the task ID to delete: "))
                     self.remove_entry(task_id)
                     self.print_message(f"Task under ID {task_id} has been successfully deleted.", 32)
+                elif selected == 5:
+                    self.print_message("Program stopped")
+                    break
                 elif selected > len(options) or selected < 1:
                     self.print_message(f"Please select from options 1-{len(options)}")
                 self.format_task_list(self.fetch_data())
