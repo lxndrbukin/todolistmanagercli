@@ -1,9 +1,10 @@
 import json
 import os
+import sys
 from tabulate import tabulate
 
 class TaskManager:
-    def __init__(self, file_path=os.path.join(os.path.dirname(__file__), "tasks.json")):
+    def __init__(self, file_path=sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "tasks.json")):
         self._file_path = file_path
         self.data = self.fetch_data()
     
