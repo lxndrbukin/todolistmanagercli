@@ -1,6 +1,6 @@
 # Task Manager CLI (OOP Version)
 
-A modern, **object-oriented command-line interface (CLI)** application for managing tasks in Python. This tool supports **adding, viewing, editing, and deleting** tasks stored in a JSON file, with a clean class-based design, formatted output using `tabulate`, and color-coded console feedback.
+A modern, **object-oriented command-line interface (CLI)** application for managing tasks in Python. This tool supports **adding, viewing, editing, and deleting** tasks stored in a JSON file, with a clean class-based design, **in-memory caching for performance**, formatted output using `tabulate`, and color-coded console feedback.
 
 ---
 
@@ -10,7 +10,8 @@ A modern, **object-oriented command-line interface (CLI)** application for manag
 - **View Tasks**: Display all tasks in a beautifully formatted table using `tabulate`.
 - **Edit Tasks**: Update existing tasks by ID.
 - **Delete Tasks**: Remove tasks by entering their ID.
-- **Persistent Storage**: Tasks saved in `tasks.json` (auto-created if missing).
+- **Persistent Storage**: Tasks saved in `tasks.json` (or custom filename via CLI argument).
+- **In-Memory Caching**: Data loaded once at startup — **instant views and edits**, disk writes only on changes.
 - **Color-Coded Feedback**: Success (green), errors (red), and info (blue) messages using ANSI codes.
 - **Robust Error Handling**: Handles invalid input, file errors, and graceful exit on `Ctrl+C`.
 
@@ -43,11 +44,20 @@ pip install tabulate
 
 ## Usage
 
-Run the application:
+### Basic Run (Default File: `tasks.json`)
 
 ```bash
 python main.py
 ```
+
+### Run with Custom Task File
+
+```bash
+python main.py myproject
+# Creates/uses: myproject.json
+```
+
+> **Perfect for multiple task lists** (personal, work, study, etc.)
 
 ### Interactive Menu
 
@@ -113,7 +123,7 @@ Please enter the task ID to delete: 1
 Task under ID 1 has been successfully deleted.
 ```
 
-> **Exit**: Select option 5 or press `Ctrl+C` to stop the program gracefully.
+> **Exit**: Select option 5 or press `Ctrl+C` to stop the program.
 
 ---
 
@@ -122,7 +132,8 @@ Task under ID 1 has been successfully deleted.
 ```
 .
 ├── main.py           # Main script with TaskManager class and CLI
-├── tasks.json        # Auto-generated JSON file storing tasks
+├── tasks.json        # Default task file (auto-created)
+├── work.json         # Example custom file (created via `python main.py work`)
 └── README.md
 ```
 
@@ -149,9 +160,9 @@ The application is built around the `TaskManager` class:
 
 | Method                         | Description                                        |
 | ------------------------------ | -------------------------------------------------- |
-| `__init__()`                   | Initializes with default `tasks.json` path         |
+| `__init__()`                   | Accepts CLI argument for custom filename; loads data into `self.data` |
 | `file_path`                    | Property with getter/setter for JSON file location |
-| `fetch_data()` / `save_data()` | Load/save tasks from/to JSON                       |
+| `fetch_data()` / `save_data()` | Load once at start; save only on changes           |
 | `create_entry(task)`           | Adds a new task with auto-incremented ID           |
 | `edit_entry(task_id, update)`  | Updates task text by ID                            |
 | `remove_entry(task_id)`        | Deletes task by ID                                 |
@@ -161,20 +172,31 @@ The application is built around the `TaskManager` class:
 
 ---
 
+## Performance Note
+
+- **In-memory caching** (`self.data`) means:
+  - **Instant** task listing and editing
+  - Disk reads: **only once** at startup
+  - Disk writes: **only when data changes**
+- Feels **snappy** even with hundreds of tasks
+
+---
+
 ## Notes
 
-- The `tasks.json` file is **automatically created** in the script directory if it doesn’t exist.
+- The JSON file is **automatically created** if it doesn’t exist.
 - Task IDs are **auto-incremented** based on the highest existing ID.
 - Invalid inputs (non-integers, out-of-range options) are handled with clear red error messages.
 - ANSI color codes work in most modern terminals (VS Code, iTerm, Windows Terminal, etc.).
-- The `file_path` can be customized via the setter if needed.
-- **Edit functionality** is now fully implemented — update any task by ID.
+- Use `python main.py <name>` to manage **multiple independent task lists** (e.g., `python main.py bootdev`, `python main.py ai-roadmap`).
 
 ---
 
 ## Future Improvements
 
 - [x] Add **edit task** functionality  
+- [x] Support **multiple task files** via CLI argument  
+- [x] **In-memory caching** for performance  
 - [ ] Support **task priorities/categories** (e.g. Low/Medium/High)  
 - [ ] Add **due dates** and reminders  
 - [ ] Implement **search/filter** by keyword  
