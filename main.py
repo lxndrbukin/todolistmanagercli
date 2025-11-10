@@ -54,6 +54,11 @@ class TaskManager:
     def print_message(message, color=31):
         print(f"\033[{color};1m\n{message}\033[0m\n")
 
+    @staticmethod
+    def list_options(options):
+        for i, option in enumerate(options, 1):
+            print(f"{i}. {option}")
+
     def format_task_list(self, tasks):
         self.print_message("Full list of tasks is shown below:", 34)
         table_data = [[item["id"], item["entry"], item["priority"]] for item in tasks]
@@ -62,18 +67,16 @@ class TaskManager:
     def run_cli(self):
         while True:
             try:
-                options = ["Add Task", "View Tasks", "Edit Task", "Delete Task", "Exit"]
+                main_options = ["Add Task", "View Tasks", "Edit Task", "Delete Task", "Exit"]
                 print("Please select an option:")
-                for i, option in enumerate(options, 1):
-                    print(f"{i}. {option}")
+                self.list_options(main_options)
                 selected = int(input(
                     f"Enter option number: "))
                 if selected == 1:
                     input_text = str(input(f"Enter and submit task: "))
                     priority_list = ["Low", "Medium", "High"]
                     print("Priority options:")
-                    for i, option in enumerate(priority_list, 1):
-                        print(f"{i}. {option}")
+                    self.list_options(priority_list)
                     priority = int(input("Select task priority: "))
                     self.create_entry({"entry": input_text, "priority": priority_list[priority - 1]})
                     self.print_message("Task created successfully.", 32)
@@ -92,7 +95,7 @@ class TaskManager:
                     self.print_message("Program stopped")
                     break
                 elif selected > len(options) or selected < 1:
-                    self.print_message(f"Please select from options 1-{len(options)}")
+                    self.print_message(f"Please select from options 1-{len(main_options)}")
                 self.format_task_list(self.fetch_data())
             except ValueError:
                 self.print_message("Please enter a number")
