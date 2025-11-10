@@ -113,11 +113,11 @@ Task under ID 1 has been successfully updated.
 ```
 Enter option number: 4
 Full list of tasks is shown below:
-+----+----------------------------------+
-| ID | Task                             |
-+----+----------------------------------+
++----+------------------------------------+
+| ID | Task                               |
++----+------------------------------------+
 | 1  | Update documentation with examples |
-+----+----------------------------------+
++----+------------------------------------+
 Please enter the task ID to delete: 1
 
 Task under ID 1 has been successfully deleted.
