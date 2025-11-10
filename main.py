@@ -94,7 +94,7 @@ class TaskManager:
                 elif selected == 5:
                     self.print_message("Program stopped")
                     break
-                elif selected > len(options) or selected < 1:
+                elif selected > len(main_options) or selected < 1:
                     self.print_message(f"Please select from options 1-{len(main_options)}")
                 self.format_task_list(self.fetch_data())
             except ValueError:
