@@ -5,6 +5,7 @@ from tabulate import tabulate
 class TaskManager:
     def __init__(self, file_path=os.path.join(os.path.dirname(__file__), "tasks.json")):
         self._file_path = file_path
+        self.data = self.fetch_data()
     
     @property
     def file_path(self):
@@ -15,38 +16,37 @@ class TaskManager:
         self._file_path = path
 
     def fetch_data(self):
+        if not os.path.exists(self.file_path):
+            return []
         with open(self.file_path, "r") as file:
             data = json.load(file)
         return data
 
-    def save_data(self, data):
+    def save_data(self):
         with open(self.file_path, "w") as file:
-            json.dump(data, file)
+            json.dump(self.data, file)
 
     def create_entry(self, task):
-        data = self.fetch_data()
-        if not data:
-            data = [{"id": 1, "task": task}]
+        if not self.data:
+            self.data = [{"id": 1, "task": task}]
         else:
-            max_id = max(data, key=lambda x: x.get("id", float("-inf")))["id"] + 1
-            data.append({'id': max_id, 'task': task})
-        self.save_data(data)
+            max_id = max(self.data, key=lambda x: x.get("id", float("-inf")))["id"] + 1
+            self.data.append({'id': max_id, 'task': task})
+        self.save_data()
 
     def edit_entry(self, task_id, update):
-        data = self.fetch_data()
-        if not data:
+        if not self.data:
             self.print_message("Task list empty")
-        for task in data:
+        for task in self.data:
             if task["id"] == task_id:
                 task["task"] = update 
-        self.save_data(data)
+        self.save_data()
         
     def remove_entry(self, task_id):
-        data = self.fetch_data()
-        for i, task in enumerate(data):
+        for i, task in enumerate(self.data):
             if task.get("id") == task_id:
-                del data[i]
-                self.save_data(data)
+                del self.data[i]
+                self.save_data()
                 return
     
     @staticmethod
