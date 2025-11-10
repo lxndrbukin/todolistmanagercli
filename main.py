@@ -29,10 +29,10 @@ class TaskManager:
 
     def create_entry(self, task):
         if not self.data:
-            self.data = [{"id": 1, "task": task}]
+            self.data = [{"id": 1, "entry": task["entry"], "priority": task["priority"]}]
         else:
             max_id = max(self.data, key=lambda x: x.get("id", float("-inf")))["id"] + 1
-            self.data.append({'id': max_id, 'task': task})
+            self.data.append({"id": max_id, "entry": task})
         self.save_data()
 
     def edit_entry(self, task_id, update):
@@ -40,7 +40,7 @@ class TaskManager:
             self.print_message("Task list empty")
         for task in self.data:
             if task["id"] == task_id:
-                task["task"] = update 
+                task["entry"] = update
         self.save_data()
         
     def remove_entry(self, task_id):
@@ -56,8 +56,8 @@ class TaskManager:
 
     def format_task_list(self, tasks):
         self.print_message("Full list of tasks is shown below:", 34)
-        table_data = [[item['id'], item['task']] for item in tasks]
-        print(tabulate(table_data, headers=["ID", "Task"], tablefmt="grid") + "\n")
+        table_data = [[item["id"], item["entry"], item["priority"]] for item in tasks]
+        print(tabulate(table_data, headers=["ID", "Task", "Priority"], tablefmt="grid") + "\n")
 
     def run_cli(self):
         while True:
@@ -70,7 +70,12 @@ class TaskManager:
                     f"Enter option number: "))
                 if selected == 1:
                     input_text = str(input(f"Enter and submit task: "))
-                    self.create_entry(input_text)
+                    priority_list = ["Low", "Medium", "High"]
+                    print("Priority options:")
+                    for i, option in enumerate(priority_list, 1):
+                        print(f"{i}. {option}")
+                    priority = int(input("Select task priority: "))
+                    self.create_entry({"entry": input_text, "priority": priority_list[priority - 1]})
                     self.print_message("Task created successfully.", 32)
                 elif selected == 3:
                     self.format_task_list(self.fetch_data())
