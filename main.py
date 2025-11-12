@@ -67,7 +67,7 @@ class TaskManager:
             print(f"{i}. {option}")
 
     def format_task_list(self, tasks):
-        self.print_message("Full list of tasks is shown below:", 34)
+        self.print_message("Full list of found tasks is shown below:", 34)
         table_data = [[item["id"], item["entry"], item["priority"]] for item in tasks]
         print(tabulate(table_data, headers=["ID", "Task", "Priority"], tablefmt="grid") + "\n")
 
@@ -87,6 +87,8 @@ class TaskManager:
                     priority = int(input("Select task priority: "))
                     self.create_entry({"entry": input_text, "priority": priority_list[priority - 1]})
                     self.print_message("Task created successfully.", 32)
+                elif selected == 2:
+                    self.format_task_list(self.fetch_data())
                 elif selected == 3:
                     self.format_task_list(self.fetch_data())
                     task_id = int(input(f"Please enter the task ID to edit: "))
@@ -101,7 +103,6 @@ class TaskManager:
                 elif selected == 5:
                     if not self.data:
                         self.print_message("Task list empty")
-                        return
                     query = str(input(f"Please enter keyword(s): "))
                     self.search(query)
                     self.format_task_list(self.search_results)
@@ -110,7 +111,6 @@ class TaskManager:
                     break
                 elif selected > len(main_options) or selected < 1:
                     self.print_message(f"Please select from options 1-{len(main_options)}")
-                self.format_task_list(self.fetch_data())
             except ValueError:
                 self.print_message("Please enter a number")
             except KeyboardInterrupt:
