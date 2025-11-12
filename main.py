@@ -33,7 +33,7 @@ class TaskManager:
             self.data = [{"id": 1, "entry": task["entry"], "priority": task["priority"]}]
         else:
             max_id = max(self.data, key=lambda x: x.get("id", float("-inf")))["id"] + 1
-            self.data.append({"id": max_id, "entry": task})
+            self.data.append({"id": max_id, "entry": task["entry"], "priority": task["priority"]})
         self.save_data()
 
     def edit_entry(self, task_id, update):
