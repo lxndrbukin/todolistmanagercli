@@ -7,6 +7,7 @@ class TaskManager:
     def __init__(self, file_path=f"{sys.argv[1]}.json" if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "tasks.json")):
         self._file_path = file_path
         self.data = self.fetch_data()
+        self.search_results = []
     
     @property
     def file_path(self):
@@ -49,7 +50,13 @@ class TaskManager:
                 del self.data[i]
                 self.save_data()
                 return
-    
+
+    def search(self, query):
+        split_query = query.split()
+        for task in self.data:
+            if any(term in task["entry"] for term in split_query):
+                self.search_results.append(task)
+
     @staticmethod
     def print_message(message, color=31):
         print(f"\033[{color};1m\n{message}\033[0m\n")
@@ -67,7 +74,7 @@ class TaskManager:
     def run_cli(self):
         while True:
             try:
-                main_options = ["Add Task", "View Tasks", "Edit Task", "Delete Task", "Exit"]
+                main_options = ["Add Task", "View Tasks", "Edit Task", "Delete Task", "Search", "Exit"]
                 print("Please select an option:")
                 self.list_options(main_options)
                 selected = int(input(
@@ -92,6 +99,13 @@ class TaskManager:
                     self.remove_entry(task_id)
                     self.print_message(f"Task under ID {task_id} has been successfully deleted.", 32)
                 elif selected == 5:
+                    if not self.data:
+                        self.print_message("Task list empty")
+                        return
+                    query = str(input(f"Please enter keyword(s): "))
+                    self.search(query)
+                    self.format_task_list(self.search_results)
+                elif selected == 6:
                     self.print_message("Program stopped")
                     break
                 elif selected > len(main_options) or selected < 1:
