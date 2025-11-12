@@ -52,9 +52,9 @@ class TaskManager:
                 return
 
     def search(self, query):
-        split_query = query.split()
+        split_query = query.lower().split()
         for task in self.data:
-            if any(term in task["entry"] for term in split_query):
+            if any(term in task["entry"].lower() for term in split_query):
                 self.search_results.append(task)
 
     @staticmethod
