@@ -52,10 +52,20 @@ class TaskManager:
                 return
 
     def search(self, query):
+        self.search_results = []
         split_query = query.lower().split()
+        results = []
         for task in self.data:
             if any(term in task["entry"].lower() for term in split_query):
-                self.search_results.append(task)
+                results.append(task)
+        for i, result in enumerate(results):
+            split_result = result["entry"].split()
+            for n, word in enumerate(split_result):
+                if word.lower() in split_query:
+                    split_result[n] = f"\033[1m{word}\033[0m"
+            result["entry"] = " ".join(split_result)
+            results[i] = result
+        self.search_results = results
 
     @staticmethod
     def print_message(message, color=31):
