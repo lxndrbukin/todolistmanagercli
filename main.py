@@ -6,12 +6,20 @@ from tabulate import tabulate
 class TaskManager:
     def __init__(self, file_path=f"{sys.argv[1]}.json" if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "tasks.json")):
         self._file_path = file_path
-        self.data = self.fetch_data()
+        self._data = self.fetch_data()
         self.search_results = []
     
     @property
     def file_path(self):
         return self._file_path
+
+    @property
+    def data(self):
+        return self._data
+
+    @data.setter
+    def data(self, data):
+        self._data = data
 
     @file_path.setter
     def file_path(self, path):
@@ -53,19 +61,18 @@ class TaskManager:
 
     def search(self, query):
         self.search_results = []
+        print(self.search_results)
         split_query = query.lower().split()
-        results = []
         for task in self.data:
             if any(term in task["entry"].lower() for term in split_query):
-                results.append(task)
-        for i, result in enumerate(results):
+                self.search_results.append(task)
+        for i, result in enumerate(self.search_results):
             split_result = result["entry"].split()
             for n, word in enumerate(split_result):
                 if word.lower() in split_query:
                     split_result[n] = f"\033[1m{word}\033[0m"
             result["entry"] = " ".join(split_result)
-            results[i] = result
-        self.search_results = results
+            self.search_results[i] = result
 
     @staticmethod
     def print_message(message, color=31):
@@ -81,10 +88,22 @@ class TaskManager:
         table_data = [[item["id"], item["entry"], item["priority"]] for item in tasks]
         print(tabulate(table_data, headers=["ID", "Task", "Priority"], tablefmt="grid") + "\n")
 
+    def exit_cli(self):
+        self.print_message("Program stopped")
+        sys.exit()
+
     def run_cli(self):
         while True:
             try:
                 main_options = ["Add Task", "View Tasks", "Edit Task", "Delete Task", "Search", "Exit"]
+                options = {
+                    1: self.create_entry,
+                    2: self.format_task_list,
+                    3: self.edit_entry,
+                    4: self.remove_entry,
+                    5: self.search,
+                    6: self.exit_cli,
+                }
                 print("Please select an option:")
                 self.list_options(main_options)
                 selected = int(input(
