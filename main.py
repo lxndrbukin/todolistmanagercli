@@ -37,6 +37,10 @@ class TaskManager:
             json.dump(self.data, file)
 
     def create_entry(self, task):
+        input_text = str(input(f"Enter and submit task: "))
+        priority_list = ["Low", "Medium", "High"]
+        print("Priority options:")
+        self.list_options(priority_list)
         if not self.data:
             self.data = [{"id": 1, "entry": task["entry"], "priority": task["priority"]}]
         else:
@@ -96,15 +100,6 @@ class TaskManager:
         while True:
             try:
                 main_options = ["Add Task", "View Tasks", "Edit Task", "Delete Task", "Search", "Exit"]
-                options = {
-                    1: self.create_entry,
-                    2: self.format_task_list,
-                    3: self.edit_entry,
-                    4: self.remove_entry,
-                    5: self.search,
-                    6: self.exit_cli,
-                }
-                print("Please select an option:")
                 self.list_options(main_options)
                 selected = int(input(
                     f"Enter option number: "))
