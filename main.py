@@ -37,10 +37,6 @@ class TaskManager:
             json.dump(self.data, file)
 
     def create_entry(self, task):
-        input_text = str(input(f"Enter and submit task: "))
-        priority_list = ["Low", "Medium", "High"]
-        print("Priority options:")
-        self.list_options(priority_list)
         if not self.data:
             self.data = [{"id": 1, "entry": task["entry"], "priority": task["priority"]}]
         else:
