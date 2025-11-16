@@ -47,32 +47,34 @@ class TaskManager:
     def edit_entry(self, task_id, update):
         if not self.data:
             self.print_message("Task list empty")
+            return
         for task in self.data:
             if task["id"] == task_id:
                 task["entry"] = update
         self.save_data()
         
     def remove_entry(self, task_id):
+        if not self.data:
+            self.print_message("Task list empty")
+            return
         for i, task in enumerate(self.data):
             if task.get("id") == task_id:
                 del self.data[i]
-                self.save_data()
-                return
+                break
+        self.save_data()
 
     def search(self, query):
         self.search_results = []
-        print(self.search_results)
         split_query = query.lower().split()
         for task in self.data:
             if any(term in task["entry"].lower() for term in split_query):
-                self.search_results.append(task)
-        for i, result in enumerate(self.search_results):
-            split_result = result["entry"].split()
-            for n, word in enumerate(split_result):
-                if word.lower() in split_query:
-                    split_result[n] = f"\033[1m{word}\033[0m"
-            result["entry"] = " ".join(split_result)
-            self.search_results[i] = result
+                result = task.copy()
+                words = result["entry"].split()
+                for i, word in enumerate(words):
+                    if word.lower() in split_query:
+                        words[i] = f"\033[1m{word}\033[0m"
+                result["entry"] = " ".join(words)
+                self.search_results.append(result)
 
     @staticmethod
     def print_message(message, color=31):
@@ -89,7 +91,6 @@ class TaskManager:
         print(tabulate(table_data, headers=["ID", "Task", "Priority"], tablefmt="grid") + "\n")
 
     def exit_cli(self):
-        self.print_message("Program stopped")
         sys.exit()
 
     def run_cli(self):
@@ -112,12 +113,18 @@ class TaskManager:
                 elif selected == 3:
                     self.format_task_list(self.fetch_data())
                     task_id = int(input(f"Please enter the task ID to edit: "))
+                    if not any(task["id"] == task_id for task in self.data):
+                        self.print_message(f"Task with ID {task_id} not found", 33)
+                        continue
                     task_update = str(input("Please enter the updated task:\n"))
                     self.edit_entry(task_id, task_update)
                     self.print_message(f"Task under ID {task_id} has been successfully updated.", 32)
                 elif selected == 4:
                     self.format_task_list(self.fetch_data())
                     task_id = int(input(f"Please enter the task ID to delete: "))
+                    if not any(task["id"] == task_id for task in self.data):
+                        self.print_message(f"Task with ID {task_id} not found", 33)
+                        continue
                     self.remove_entry(task_id)
                     self.print_message(f"Task under ID {task_id} has been successfully deleted.", 32)
                 elif selected == 5:
@@ -128,14 +135,14 @@ class TaskManager:
                     self.format_task_list(self.search_results)
                 elif selected == 6:
                     self.print_message("Program stopped")
-                    break
+                    self.exit_cli()
                 elif selected > len(main_options) or selected < 1:
                     self.print_message(f"Please select from options 1-{len(main_options)}")
             except ValueError:
                 self.print_message("Please enter a number")
             except KeyboardInterrupt:
                 self.print_message("Program stopped by user")
-                break
+                self.exit_cli()
 
 if __name__ == "__main__":
     TaskManager().run_cli()
